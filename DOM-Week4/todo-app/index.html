@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input id="title" type="text" placeholder="title"><br></br>
+        <input id="description" type="text" placeholder="description"><br></br>
+        <button onclick="addTodo()">Add todo</button>
+        <div id="todos"></div>
+    </div>
+    <script>
+        let globalId=1
+        // function addTodo() {
+        //     const title = document.getElementById("title").value;
+        //     const description = document.getElementById("description").value;
+        //     const parent=document.getElementById("todos")
+
+        //     parent.appendChild(createChild(title,description,globalId++))
+        // }
+        function updateDomAccToState(state){
+            
+            const parent=document.getElementById("todos")
+            parent.innerHTML=""
+            for(let i=0;i<state.length;i++){
+const child=createChild(state[i].title,state[i].description,state[i].id)
+parent.appendChild(child)
+            }
+        }
+        updateDomAccToState([{
+            title:"go to gym",
+            description:"go to gym 5-7",
+            id:1
+        },{
+        title:"go to gym",
+            description:"go to gym 5-7",
+            id:2
+        }])
+        window.setInterval(async function(){
+            const res=await fetch("url")
+            const json=await res.json()
+            updateDomAccToState(json)
+        },5000)
+    </script>
+</body>
+</html>
