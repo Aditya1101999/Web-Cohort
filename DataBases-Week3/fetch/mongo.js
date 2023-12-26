@@ -6,7 +6,7 @@ const jwtPassword = "123456"
 
 app.use(express.json())
 mongoose.connect(
-  "mongodb+srv://Aditya:Y9NUuGGxO8aKjFIU@cluster0.lrn4k57.mongodb.net/tester",
+  "db url",
 );
 
 // const model = mongoose.model('Users', { name: String , email : String , password : String });
