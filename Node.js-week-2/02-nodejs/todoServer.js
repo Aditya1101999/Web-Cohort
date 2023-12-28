@@ -37,13 +37,140 @@
 
     - For any other route not defined in the server return 404
 
-  Testing the server - run `npm run test-todoServer` command in terminal
+  Testing the server - run npm run test-todoServer command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
+  const express = require("express");
+  const bodyParser = require("body-parser");
+  const fs=require("fs")
   const app = express();
   
   app.use(bodyParser.json());
+  
+  // let todos = [];
+  
+  // app.get("/todos", (req, res) => {
+  //   res.status(200).json(todos);
+  // });
+  app.get("/todos",(req,res)=>{
+    fs.readFile("todos.json","utf-8",(err,data)=>{
+      if(err) throw err
+      res.status(200).json(JSON.parse(data))
+    })
+  })
+  
+  // app.get("/todos/:id", (req, res) => {
+  //   const todo = todos.find((todo) => todo.id === parseInt(req.params.id));
+  //   if (!todo) {
+  //     return res.status(404).send();
+  //   }
+  //   res.status(200).json(todo);
+  // });
+  app.get("/todos/:id",(req,res)=>{
+    fs.readFile("todos.json","utf-8",(err,data)=>{
+      if(err) throw err
+      todos=JSON.parse(data)
+      const todo = todos.find((todo) => todo.id === parseInt(req.params.id));
+      if (!todo) {
+          return res.status(404).send();
+        }
+        res.status(200).json(todo);
+    })
+  })
+  
+  // app.post("/todos", (req, res) => {
+  //   let newId;
+  //   do {
+  //     newId = Math.floor(Math.random() * 100000);
+  //   } while (todos.some((todo) => todo.id === newId));
+  //   const newTodo = {
+  //     id: newId,
+  //     title: req.body.title,
+  //     description: req.body.description,
+  //   };
+  //   todos.push(newTodo);
+  //   res.status(201).json({id:newId});
+  // });
+
+  app.post("/todos",(req,res)=>{
+    fs.readFile("todos.json","utf-8",(err,data)=>{
+      if(err) throw err
+      todos=JSON.parse(data)
+      let newId
+      do{
+        newId=Math.floor(Math.random()*100000)
+      }
+      while(todos.some((todo)=>todo.id===newId))
+      const newTodo={
+    id:newId,
+    title:req.body.title,
+    description:req.body.description
+  }
+      todos.push(newTodo)
+      data=JSON.stringify(todos)
+      fs.writeFile("todos.json",data,(err)=>{
+        if(err)throw err
+        res.status(201).json({id:newId});
+    })
+  })
+})
+  
+  // app.put("/todos/:id", (req, res) => {
+  //   const todoIndex = todos.findIndex(
+  //     (todo) => todo.id === parseInt(req.params.id)
+  //   );
+  //   if (todoIndex == -1) {
+  //     return res.status(404).send();
+  //   }
+  //   todos[todoIndex].title = req.body.title;
+  //   todos[todoIndex].description = req.body.description;
+  //   res.status(200).json(todos[todoIndex]);
+  // });
+
+  app.put("/todos/:id",(req,res)=>{
+    fs.readFile("todos.json","utf-8",(err,data)=>{
+      if(err) throw err
+      todos=JSON.parse(data)
+      const todoIndex=todos.findIndex((todo)=>todo.id===parseInt(req.params.id))
+      if(todoIndex==-1){
+        return res.status(404).send();
+      }
+      todos[todoIndex].title = req.body.title;
+      todos[todoIndex].description = req.body.description;
+      fs.writeFile("todos.json",JSON.stringify(todos),(err)=>{
+        if(err) throw err
+        res.status(200).json(todos[todoIndex]);
+      })
+    })
+  })
+  // app.delete("/todos/:id", (req, res) => {
+  //   const todoIndex = todos.findIndex(
+  //     (todo) => todo.id === parseInt(req.params.id)
+  //   )
+  //   if (todoIndex == -1) {
+  //     return res.status(404).send();
+  //   }
+  //   todos.splice(todoIndex, 1);
+  //   res.status(200).send();
+  // });
+
+  app.delete("/todos/:id",(req,res)=>{
+    fs.readFile("todos.json","utf-8",(err,data)=>{
+      if(err) throw err
+      let todos=JSON.parse(data)
+      const todoIndex=todos.findIndex((todo)=>todo.id===parseInt(req.params.id))
+      if(todoIndex==-1){
+        return res.status(404).send();
+      }
+      todos.splice(todoIndex, 1)
+      fs.writeFile("todos.json",JSON.stringify(todos),(err)=>{
+        if(err) throw err
+          res.status(200).send();
+      })
+    })
+  })
+  
+  app.use((req, res) => {
+    res.status(404).send("Route not found");
+  });
   
   module.exports = app;
