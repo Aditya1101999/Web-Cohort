@@ -6,7 +6,7 @@ const todoSchema=new mongoose.Schema({
     completed:Boolean
 })
 
-mongoose.connect("mongodb+srv://Aditya:Y9NUuGGxO8aKjFIU@cluster0.lrn4k57.mongodb.net/")
+mongoose.connect("your-mongo-url")
 
 const todo=mongoose.model('todos',todoSchema)
 
