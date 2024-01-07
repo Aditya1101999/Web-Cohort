@@ -1,4 +1,112 @@
-import React,{ useEffect, useState } from "react"
+import React,{ useCallback, useEffect, useMemo, useState } from "react"
+import axios from "axios"
+
+function App() {
+  const [count, setCount] = useState(0)
+
+
+//only re render this function if any dependency changes
+  const  logSomething= useCallback(()=> {
+    console.log("child clicked")
+  },[])
+
+  return <div>
+    <Child onClick={logSomething} />
+    <button onClick={() => {
+      setCount(count + 1);
+    }}>Click me {count}</button>
+  </div>
+}
+
+const Child = memo(({logSomething}) => {
+  console.log("child render")
+
+  return <div>
+    <button onClick={onClick}>Button clicked</button>
+  </div>
+})
+
+
+// function App(){
+//   const [counter,setCounter]=useState(0)
+//   const [inputValue,setInputValue]=useState(1)
+//   // const [finalValue,setFinalValue]=useState(0)
+
+//   // useEffect(()=>{
+//   //   let count=0
+//   //   for(let i=1;i<=inputValue;i++){
+//   //       count+=i
+//   //   }
+//   //   setFinalValue(count)
+//   // },[inputValue])
+
+//   //will only run when inputvalue changes
+//   let count=useMemo(()=>{
+//     let count=0
+//       for(let i=1;i<=inputValue;i++){
+//           count+=i
+//       }
+//       return count
+//   },[inputValue])
+
+
+//   return <div>
+//     <input onChange={(e)=>setInputValue(e.target.value)} placeholder={"Find sum from 1 to n"}></input><br/>
+//     Sum from 1 to {inputValue} is {count}<br/>
+//     <button onClick={()=>{setCounter(counter+1)}}>Counter {counter}</button>
+
+//   </div>
+// }
+// function App() {
+//   const [id,setId]=useState(1)
+//   return <div>
+//     <button onClick={()=>{setId(1)}}>1</button>
+//     <button onClick={()=>{setId(2)}}>2</button>
+//     <button onClick={()=>{setId(3)}}>3</button>
+//     <button onClick={()=>{setId(4)}}>4</button>
+//     <Todo id={id} />
+//   </div>
+// }
+
+// function Todo({id}) {
+//   const [todo, setTodo] = useState({});
+
+//   useEffect(() => {
+//     fetch(`https://sum-server.100xdevs.com/todo?id=${id}`)
+//       .then(async function(res) {
+//         const json = await res.json();
+//         setTodo (json.todo);
+//       })
+//   }, [id])
+
+//   return <div>
+//     <h1>
+//       {todo.title}
+//     </h1>
+//     <h4>
+//       {todo.description}
+//     </h4>
+//   </div>
+// }
+
+// function App(){
+
+//   const [todos,setTodos]=useState([])
+
+//   useEffect(()=>{
+//     axios.get("https://sum-server.100xdevs.com/todos")
+//     .then((res)=>
+//     setTodos(res.data.todos))
+//   },[])
+
+//   return <>
+//   {todos.map(todo => <Todo key={todo.id} title={todo.title} description={todo.description}/>)}
+//   </>
+
+// }
+
+
+
 
 // Assignment #2
 // Create a component that takes a todo id as input
@@ -6,33 +114,33 @@ import React,{ useEffect, useState } from "react"
 // The parent component should have a button, clicking on which the next
 // todo is fetched
 
-function App(){
+// function App(){
 
-  const [id,setId]=useState(1)
+//   const [id,setId]=useState(1)
 
-  return <div>
-    <button onClick={()=>{setId(id+1)}}>Click me</button>
-    <Todo id={id}/>
-  </div>
+//   return <div>
+//     <button onClick={()=>{setId(id+1)}}>Click me</button>
+//     <Todo id={id}/>
+//   </div>
 
 
 
-}
-function Todo({id}){
-  const [todo,setTodo]=useState([])
-  useEffect(()=>{
-    // Fetch data from API
-    fetch("https://sum-server.100xdevs.com/todo?id="+id)
-    .then(async (res)=>{
-      let json = await res.json()
-      setTodo(json.todo)
-    })
-  },[id])//whenver id gets changed
-  return <div>
-     <h1>{todo.title}</h1>
-     <h5>{todo.description}</h5>
-   </div>
-}
+// }
+// function Todo({id}){
+//   const [todo,setTodo]=useState([])
+//   useEffect(()=>{
+//     // Fetch data from API
+//     fetch("https://sum-server.100xdevs.com/todo?id="+id)
+//     .then(async (res)=>{
+//       let json = await res.json()
+//       setTodo(json.todo)
+//     })
+//   },[id])//whenver id gets changed
+//   return <div>
+//      <h1>{todo.title}</h1>
+//      <h5>{todo.description}</h5>
+//    </div>
+// }
 
 
 
