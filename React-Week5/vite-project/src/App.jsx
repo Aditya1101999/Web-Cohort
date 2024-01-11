@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
+import { BusinessCard } from './Components/BusinessCard';
 
 
 
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <div>
+      <BusinessCard/>
      {/* <CustomButton count={count} setCount={setCount}></CustomButton> */}
     <button onClick={addTodo}>Add a Random Todo</button>
     {todos.map(function(todo){return <Todo title={todo.title} description={todo.description}/>})}
