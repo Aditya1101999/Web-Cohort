@@ -1,8 +1,11 @@
-import React,{ useCallback, useEffect, useMemo, useState } from "react"
+import React,{ useCallback, useEffect, useMemo, useRef, useState } from "react"
 import axios from "axios"
 
 function App() {
   const [count, setCount] = useState(0)
+  const divRef=useRef()
+
+  
 
 
 //only re render this function if any dependency changes
