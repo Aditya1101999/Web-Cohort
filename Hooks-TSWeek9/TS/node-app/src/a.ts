@@ -61,7 +61,7 @@ type Employee = {
   type TeamLead = Employee & Manager;
   
   const teamLead: TeamLead = {
-    name: "harkirat",
+    name: "aditya",
     startDate: new Date(),
     department: "Software developer"
   };

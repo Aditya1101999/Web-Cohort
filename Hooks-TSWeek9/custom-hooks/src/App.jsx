@@ -2,18 +2,81 @@ import React , { useState , useEffect } from 'react'
 import './App.css'
 import axios from 'axios'
 
-function useIsOnline(){
-  const [online,setOnline]=useState(window.navigator.onLine)
-
+const useDebounce = (inputValue,delay)=>{
+  const [debouncedValue,setDebounced] = useState(inputValue)
   useEffect(()=>{
-    window.addEventListener('online', () => setOnline(true));
-   window.addEventListener('offline', () => setOnline(false));
-  })
+    const handler= setTimeout(()=>setDebounced(inputValue), delay);
+    return()=>{
+      clearTimeout(handler)
+    }
+  },[inputValue,delay])
+  return debouncedValue
+}
+
+const SearchBar = () => {
+  const [inputValue, setInputValue] = useState('');
+  const debouncedValue = useDebounce(inputValue, 500); // 500 milliseconds debounce delay
+
+  // Use the debouncedValue in your component logic, e.g., trigger a search API call via a useEffect
+
+  return (
+    <input
+      type="text"
+      value={inputValue}
+      onChange={(e) => setInputValue(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+};
+
+const useInterval = (callback,delay) =>{
+  useEffect(()=>{
+    const value=setInterval(callback,delay)
+    return ()=>{
+      clearInterval(value)
+    }
+  },[callback,delay])
+}
+
+const useMousePointer = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    setPosition({ x: e.clientX, y: e.clientY });
+  };
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return position;
+};
+
+function useIsOnline(){
+  const [online, setOnline] = useState(window.navigator.onLine)
+
+  useEffect(() => {
+    const handleOnline = () => setOnline(true);
+    const handleOffline = () => setOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    }
+  }, [])
 
   return online
 }
 
+
 function useTodos(n){
+ // const { data, error, isLoading } = useSWR('https://sum-server.100xdevs.com/todos', fetcher) - fetcher is the json
   const [todos, setTodos] = useState([])
   const [loading,setLoading]=useState(true)
 
@@ -40,6 +103,11 @@ function useTodos(n){
 
 function App() {
   const {todos,loading}=useTodos(5)
+  const [count,setCount]=useState(0)
+
+  useInterval(()=>{
+    setCount(c=>c+1)
+  },1000)
 
   return (
     <>
