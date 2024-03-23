@@ -1,6 +1,6 @@
 const mongoose=require("mongoose")
 
-mongoose.connect("mongodb+srv://Aditya:Y9NUuGGxO8aKjFIU@cluster0.lrn4k57.mongodb.net/")
+mongoose.connect("mongodb://localhost:27017")
 
 const schema = new mongoose.Schema({
     username: {
@@ -17,13 +17,13 @@ const schema = new mongoose.Schema({
         required: true,
         minLength: 6
     },
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         trim: true,
         maxLength: 50
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true,
         trim: true,

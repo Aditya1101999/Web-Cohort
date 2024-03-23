@@ -9,8 +9,8 @@ const {authMiddleware}=require("../middleware")
 const signupSchema=zod.object({
     username:zod.string().email(),
     password:zod.string(),
-    firstname:zod.string(),
-    lastname:zod.string()
+    firstName:zod.string(),
+    lastName:zod.string()
 })
 
 const signinSchema=zod.object({
@@ -31,11 +31,11 @@ userRouter.post("/signup",async (req,res)=>{
         return res.status(409).json({message:"Username already exists."})
     }
     const dbUser=await User.create(body)
+    const userId=dbUser._id
     await Account.create({
         userId,
         balance:1+Math.random()*10000
     })
-    const userId=dbUser._id
     const token=jwt.sign({
         userId
     },JWT_SECRET)
@@ -110,4 +110,4 @@ userRouter.get("/bulk",async(req,res)=>{
     })
 })
 
-module.exports(userRouter)
+module.exports=userRouter
